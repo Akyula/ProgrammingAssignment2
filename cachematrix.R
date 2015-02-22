@@ -1,15 +1,32 @@
-## Put comments here that give an overall description of what your
-## functions do
+## This is programing assginment 2 for prog-011 R class
+## The purpose of this assignment is work on the lexical scooping aspects of R
+## This function is designed to create a matrix object outside the environment that
+## calculates the inverse of the matrix
 
-## Write a short comment describing this function
-
+## The 'makeCacheMatrix is designed to make a matrix and create a cache version of the inverse of the matrix for
+## use by the second part of this assignment.  
 makeCacheMatrix <- function(x = matrix()) {
-
+        z <- NULL
+        set <- function(y) {
+                x <<- y
+                z <<- NULL
+        }
+        
+        get <- function() x
+        setinverse <- function(solve) z <<- solve
+        getinverse <- function() z
+        list(set = set, get = get, setinverse = setinverse, getinverse = getinverse)
 }
 
-
-## Write a short comment describing this function
-
+## 'cacheSolve' will return a inverse matrix of x
 cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
+        z <- x$getinverse()
+        if(!is.null(z)) {
+                message("using cached data")
+                return(z)
+        }
+        data <- x$get()
+        z <- solve(data, ...)
+        x$setinverse(z)
+        z
 }
